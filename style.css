@@ -1,0 +1,19 @@
+* {
+  margin : 0;
+  padding : 0;
+  box-sizing: border-box;
+}
+
+#container {
+  position: absolute;
+  left: 30%;
+  top: 20%;
+}
+
+#canvas1 {
+  border: 1px solid;
+}
+
+#gokuSprites{
+  display: none;
+}
