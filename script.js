@@ -21,10 +21,22 @@ const goku_boxing_frames = [
   "Fotot/Transform/8.png"
 ]
 
-const goku_idle = [
-  "Fotot/Idle/0.png",
-  "Fotot/Idle/1.png"
+const goku_idle_frames = [
+  "Fotot/Idle_base/0.png",
+  "Fotot/Idle_base/1.png"
 ]
+
+const goku_walking_base_frames = [
+  "Fotot/Walking_base/0.png",
+  "Fotot/Walking_base/1.png",
+  "Fotot/Walking_base/2.png"
+]
+
+const goku_idle_animation = {
+  frames: [],
+  currentFrame: 0,
+  changePos:  [[0, 0], [0, 5]]
+}
 
 const goku_boxing_animation = {
   frames: [],
@@ -32,24 +44,37 @@ const goku_boxing_animation = {
   changePos:  [[0, 0], [-18, 0], [-27, -42], [-27, -47], [-20, -10], [-18, -14], [-15, -18], [-28, -45], [0, -10]]
 }
 
+const goku_walking_base_animation = {
+  frames: [],
+  currentFrame: 0,
+  changePos:  [[0, 0], [0, 0], [0, 0]]
+}
+
+const all_sprites = [goku_idle_frames, goku_boxing_frames, goku_walking_base_frames];
+const all_animations = [goku_idle_animation, goku_boxing_animation, goku_walking_base_animation];
+// let this_animation = goku_idle_animation;
+
 function preloadImages() {
   let loadedImages = 0;
 
-  for (let i = 0; i < goku_boxing_frames.length; i++) {
+  for (let j = 0; j < all_sprites.length; j++){
+    for (let i = 0; i < all_sprites[j].length; i++) {
       const img = new Image();
-      img.src = goku_boxing_frames[i];
+      img.src = all_sprites[j][i];
       img.onload = () => {
           loadedImages++;
       };
-      goku_boxing_animation.frames.push(img);
+      all_animations[j].frames.push(img);
   }
+  }
+
+  
   background_image.onload = () => {
     context.drawImage(background_image, 0, 0, canvas.width, canvas.height);
   }
 }
 
 
-// context.fillRect(0, 0, canvas.width, canvas.height); 
 const gravity = 0.2;
 let previousTime = performance.now();
 
@@ -59,6 +84,7 @@ class Sprite {
      this.velocity = velocity;
      this.height = 150;
      this.lastKey;
+     this.this_animation = goku_idle_animation;
   }
   
   draw(){
@@ -71,15 +97,15 @@ class Sprite {
     context.clearRect(0, 0, canvas.width, canvas.height);
     this.draw();
 
-    if (goku_boxing_animation.currentFrame <= goku_boxing_animation.frames.length){
+    if (player.this_animation.currentFrame <= player.this_animation.frames.length){
 
-      const currentFrameImage = goku_boxing_animation.frames[goku_boxing_animation.currentFrame];
-      context.drawImage(currentFrameImage, 100+goku_boxing_animation.changePos[goku_boxing_animation.currentFrame][0], 460+goku_boxing_animation.changePos[goku_boxing_animation.currentFrame][1], 1.5*currentFrameImage.width, 1.5*currentFrameImage.height);
+      const currentFrameImage = player.this_animation.frames[player.this_animation.currentFrame];
+      context.drawImage(currentFrameImage, player.position.x + player.this_animation.changePos[player.this_animation.currentFrame][0], player.position.y+player.this_animation.changePos[player.this_animation.currentFrame][1], 1.5*currentFrameImage.width, 1.5*currentFrameImage.height);
   
       const now = performance.now();
       const elapsedTime = now - previousTime;
       if (elapsedTime >= 400) {
-        goku_boxing_animation.currentFrame = (goku_boxing_animation.currentFrame+1)%9;
+        player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
         previousTime = now;
       }
 
@@ -176,6 +202,7 @@ window.addEventListener('keydown', (event) => {
     case 'd' :
       keys.d.pressed = true;
       player.lastKey = 'd';
+      player.this_animation = goku_walking_base_animation;
       break;
     case 'a' : 
       keys.a.pressed = true;
@@ -183,6 +210,10 @@ window.addEventListener('keydown', (event) => {
       break;
     case 'w' : 
       player.velocity.y = -10;
+      break;
+
+    case 't':
+      player.this_animation = goku_boxing_animation;
       break;
 
     // Enemy keys
@@ -210,6 +241,7 @@ window.addEventListener('keyup', (event) => {
   switch(event.key){
     case 'd' :
       keys.d.pressed = false;
+      player.this_animation = goku_idle_animation;
     break;
     case 'a' : 
       keys.a.pressed = false;
