@@ -26,7 +26,7 @@ function preloadImages() {
 }
 
 
-const gravity = 0.2;
+const gravity = 0.25;
 let previousTime = performance.now();
 
 class Sprite {
@@ -55,12 +55,14 @@ class Sprite {
   
       const now = performance.now();
       const elapsedTime = now - previousTime;
-      if (elapsedTime >= 400*player.this_animation.animation_speed) {
-        player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+      if (player.this_animation.move(elapsedTime)){
         previousTime = now;
       }
-
-
+      
+      // if (elapsedTime >= 400*player.this_animation.animation_speed) {
+      //   player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+      //   previousTime = now;
+      // }
     }
 
     
@@ -73,6 +75,7 @@ class Sprite {
         player.this_animation.currentFrame = 0;
         player.this_animation = goku_idle_animation;
         keys.w.pressed = false;        
+        console.log("ok");
       }
     }
     else {
@@ -172,7 +175,7 @@ window.addEventListener('keydown', (event) => {
       break;
 
     case 't':
-      player.this_animation = goku_boxing_animation;
+      player.this_animation = goku_transform_animation;
       break;
 
     // Enemy keys
@@ -207,7 +210,7 @@ window.addEventListener('keyup', (event) => {
       player.this_animation = goku_idle_animation;
     break;
     case 'w' : 
-      keys.w.pressed = false;
+      // keys.w.pressed = false;
     break;
     
     //Enemy keys

@@ -3,7 +3,7 @@ const background_image = new Image();
 background_image.src = background_path;
 
 
-const goku_boxing_frames = [
+const goku_transform_frames = [
   "Fotot/Transform/0.png",
   "Fotot/Transform/1.png",
   "Fotot/Transform/2.png",
@@ -23,13 +23,15 @@ const goku_idle_frames = [
 const goku_walking_right_base_frames = [
   "Fotot/Walking_right_base/0.png",
   "Fotot/Walking_right_base/1.png",
-  "Fotot/Walking_right_base/2.png"
+  "Fotot/Walking_right_base/2.png",
+  "Fotot/Walking_right_base/3.png"
 ]
 
 const goku_walking_left_base_frames = [
   "Fotot/Walking_left_base/0.png",
   "Fotot/Walking_left_base/1.png",
-  "Fotot/Walking_left_base/2.png"
+  "Fotot/Walking_left_base/2.png",
+  "Fotot/Walking_left_base/3.png"
 ]
 
 const goku_jump_base_frames = [
@@ -44,48 +46,78 @@ const goku_idle_animation = {
   frames: [],
   currentFrame: 0,
   changePos:  [[0, 0], [0, 5]],
-  animation_speed : 1
+  animation_speed : 1,
+  move : function(e) {
+    if (e >= 400*player.this_animation.animation_speed) {
+        player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+        return true;
+      }
+  }
 }
 
-const goku_boxing_animation = {
+const goku_transform_animation = {
   frames: [],
   currentFrame: 0,
   changePos:  [[0, 0], [-18, 0], [-27, -42], [-27, -47], [-20, -10], [-18, -14], [-15, -18], [-28, -45], [0, -10]],
-  animation_speed : 1
+  animation_speed : 1,
+  move : function(e) {
+    if (e >= 400*player.this_animation.animation_speed && player.this_animation.currentFrame != 8) {
+      player.this_animation.currentFrame++;
+      return true;
+    }
+  }
 }
 
 const goku_walking_right_base_animation = {
   frames: [],
   currentFrame: 0,
-  changePos:  [[0, 0], [0, 0], [0, 0]],
-  animation_speed : 1
+  changePos:  [[0, 0], [0, 0], [0, 0], [0, 0]],
+  animation_speed : 1,
+  move : function(e){
+    if (e >= 400*player.this_animation.animation_speed) {
+        player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+        return true;
+    }
+  }
 }
 
 
 const goku_walking_left_base_animation = {
   frames: [],
   currentFrame: 0,
-  changePos:  [[0, 0], [0, 0], [0, 0]],
-  animation_speed : 1
+  changePos:  [[0, 0], [0, 0], [0, 0], [0, 0]],
+  animation_speed : 1,
+  move : function(e){
+    if (e >= 400*player.this_animation.animation_speed) {
+        player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+        return true;
+    }
+  }
 }
 
 const goku_jump_base_animation = {
   frames: [],
   currentFrame: 0,
   changePos:  [[0, 0], [0, 0],[0, 0], [0, 0], [0, 0]],
-  animation_speed : 1.05
+  animation_speed : 1.05,
+  move : function(e) {
+    if (e >= 400*player.this_animation.animation_speed) {
+      player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+      return true;
+  }
+  }
 }
 
 const all_sprites = [
   goku_idle_frames,
-  goku_boxing_frames, 
+  goku_transform_frames, 
   goku_walking_right_base_frames,
   goku_walking_left_base_frames, 
   goku_jump_base_frames
 ];
 const all_animations = [
   goku_idle_animation, 
-  goku_boxing_animation, 
+  goku_transform_animation, 
   goku_walking_right_base_animation,
   goku_walking_left_base_animation, 
   goku_jump_base_animation
