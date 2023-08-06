@@ -4,55 +4,6 @@ const context = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
 
-const background_path = "Fotot/Backgrounds/44841.png";
-const background_image = new Image();
-background_image.src = background_path;
-
-
-const goku_boxing_frames = [
-  "Fotot/Transform/0.png",
-  "Fotot/Transform/1.png",
-  "Fotot/Transform/2.png",
-  "Fotot/Transform/3.png",
-  "Fotot/Transform/4.png",
-  "Fotot/Transform/5.png",
-  "Fotot/Transform/6.png",
-  "Fotot/Transform/7.png",
-  "Fotot/Transform/8.png"
-]
-
-const goku_idle_frames = [
-  "Fotot/Idle_base/0.png",
-  "Fotot/Idle_base/1.png"
-]
-
-const goku_walking_base_frames = [
-  "Fotot/Walking_base/0.png",
-  "Fotot/Walking_base/1.png",
-  "Fotot/Walking_base/2.png"
-]
-
-const goku_idle_animation = {
-  frames: [],
-  currentFrame: 0,
-  changePos:  [[0, 0], [0, 5]]
-}
-
-const goku_boxing_animation = {
-  frames: [],
-  currentFrame: 0,
-  changePos:  [[0, 0], [-18, 0], [-27, -42], [-27, -47], [-20, -10], [-18, -14], [-15, -18], [-28, -45], [0, -10]]
-}
-
-const goku_walking_base_animation = {
-  frames: [],
-  currentFrame: 0,
-  changePos:  [[0, 0], [0, 0], [0, 0]]
-}
-
-const all_sprites = [goku_idle_frames, goku_boxing_frames, goku_walking_base_frames];
-const all_animations = [goku_idle_animation, goku_boxing_animation, goku_walking_base_animation];
-// let this_animation = goku_idle_animation;
 
 function preloadImages() {
   let loadedImages = 0;
@@ -82,7 +33,7 @@ class Sprite {
   constructor({position, velocity}){
      this.position = position;
      this.velocity = velocity;
-     this.height = 150;
+     this.height = 120;
      this.lastKey;
      this.this_animation = goku_idle_animation;
   }
@@ -104,7 +55,7 @@ class Sprite {
   
       const now = performance.now();
       const elapsedTime = now - previousTime;
-      if (elapsedTime >= 400) {
+      if (elapsedTime >= 400*player.this_animation.animation_speed) {
         player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
         previousTime = now;
       }
@@ -118,6 +69,11 @@ class Sprite {
     this.position.x += this.velocity.x;
     if (this.position.y + this.height + this.velocity.y >= canvas.height){
       this.velocity.y = 0;
+      if (keys.w.pressed) {
+        player.this_animation.currentFrame = 0;
+        player.this_animation = goku_idle_animation;
+        keys.w.pressed = false;        
+      }
     }
     else {
       this.velocity.y += gravity;
@@ -180,9 +136,9 @@ function animate(){
   enemy.velocity.x = 0;
 
   if (keys.a.pressed && player.lastKey === 'a'){
-    player.velocity.x = -1;
+    player.velocity.x = -2.5;
   }else if (keys.d.pressed && player.lastKey === 'd') {
-    player.velocity.x = 1;
+    player.velocity.x = 2.5;
   }
 
   if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
@@ -202,14 +158,17 @@ window.addEventListener('keydown', (event) => {
     case 'd' :
       keys.d.pressed = true;
       player.lastKey = 'd';
-      player.this_animation = goku_walking_base_animation;
+      player.this_animation = goku_walking_right_base_animation;
       break;
     case 'a' : 
       keys.a.pressed = true;
       player.lastKey = 'a';
+      player.this_animation = goku_walking_left_base_animation
       break;
     case 'w' : 
+      keys.w.pressed = true;
       player.velocity.y = -10;
+      player.this_animation = goku_jump_base_animation;
       break;
 
     case 't':
@@ -245,9 +204,10 @@ window.addEventListener('keyup', (event) => {
     break;
     case 'a' : 
       keys.a.pressed = false;
+      player.this_animation = goku_idle_animation;
     break;
     case 'w' : 
-      keys.w.pressed = true;
+      keys.w.pressed = false;
     break;
     
     //Enemy keys
