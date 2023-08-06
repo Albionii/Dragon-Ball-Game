@@ -35,7 +35,7 @@ class Sprite {
      this.velocity = velocity;
      this.height = 120;
      this.lastKey;
-     this.this_animation = goku_idle_animation;
+     this.this_animation = goku_idle_right_animation;
   }
   
   draw(){
@@ -73,7 +73,7 @@ class Sprite {
       this.velocity.y = 0;
       if (keys.w.pressed) {
         player.this_animation.currentFrame = 0;
-        player.this_animation = goku_idle_animation;
+        player.this_animation = goku_idle_right_animation;
         keys.w.pressed = false;        
         console.log("ok");
       }
@@ -116,6 +116,9 @@ const keys = {
     pressed: false
   },
   w : {
+    pressed: false
+  },
+  j : {
     pressed: false
   },
 
@@ -167,16 +170,33 @@ window.addEventListener('keydown', (event) => {
       keys.a.pressed = true;
       player.lastKey = 'a';
       player.this_animation = goku_walking_left_base_animation
+      
       break;
     case 'w' : 
-      keys.w.pressed = true;
-      player.velocity.y = -10;
-      player.this_animation = goku_jump_base_animation;
+      if (keys.w.pressed == false){
+        keys.w.pressed = true;
+        player.velocity.y = -10;
+        player.this_animation = goku_jump_base_animation;  
+      }
       break;
 
+
+    // Transform
     case 't':
       player.this_animation = goku_transform_animation;
       break;
+
+    //Attack
+    case 'j': 
+      keys.j.pressed = true;
+      player.this_animation = goku_attack_base_animation;
+      break;
+
+    case 'i':
+      player.this_animation = goku_teleport_base_animation;
+      break;
+
+
 
     // Enemy keys
     case 'ArrowLeft' : 
@@ -193,7 +213,6 @@ window.addEventListener('keydown', (event) => {
       break;
     
   }
-  // document.getElementById("text").innerHTML = event.key;
 });
 
 
@@ -203,15 +222,19 @@ window.addEventListener('keyup', (event) => {
   switch(event.key){
     case 'd' :
       keys.d.pressed = false;
-      player.this_animation = goku_idle_animation;
+      player.this_animation = goku_idle_right_animation;
     break;
     case 'a' : 
       keys.a.pressed = false;
-      player.this_animation = goku_idle_animation;
+      player.this_animation = goku_idle_left_animation;
     break;
     case 'w' : 
       // keys.w.pressed = false;
     break;
+
+    case 'j' : 
+      keys.j.pressed = false;
+      break;
     
     //Enemy keys
     case 'ArrowLeft' : 
