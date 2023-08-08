@@ -218,6 +218,7 @@ window.addEventListener('keyup', (event) => {
       keys.d.pressed = false;
       if (keys.a.pressed){
         player.this_animation = goku_walking_left_base_animation;
+        player.lastKey = 'a';
         break;
       }
       player.this_animation = goku_idle_right_animation;
@@ -226,6 +227,7 @@ window.addEventListener('keyup', (event) => {
       keys.a.pressed = false;
       if (keys.d.pressed){
         player.this_animation = goku_walking_right_base_animation;
+        player.lastKey = 'd';
         break;
       }
       player.this_animation = goku_idle_left_animation;
