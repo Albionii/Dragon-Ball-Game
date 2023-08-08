@@ -154,7 +154,7 @@ const goku_attack_base_animation = {
   frames: [],
   currentFrame: 0,
   changePos:  [[0, 0],[0, 0], [0, 0], [0, 0]],
-  animation_speed : 1.2,
+  animation_speed : 0.8,
   move : function(e) {
     if (e >= 400*player.this_animation.animation_speed) {
       player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
@@ -169,7 +169,7 @@ const goku_attack_base_animation = {
 const goku_teleport_base_animation = {
   frames: [],
   currentFrame: 0,
-  changePos:  [[0, 0], [0, 0],[0, 0], [600, 0],[600, 0]],
+  changePos:  [[0, 0], [0, 0],[0, 0], [600, 0],[0, 0]],
   animation_speed : 0.5,
   move : function(e) {
     if (e >= 400*this.animation_speed) {

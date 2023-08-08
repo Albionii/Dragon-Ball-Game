@@ -57,12 +57,7 @@ class Sprite {
       const elapsedTime = now - previousTime;
       if (player.this_animation.move(elapsedTime)){
         previousTime = now;
-      }
-      
-      // if (elapsedTime >= 400*player.this_animation.animation_speed) {
-      //   player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
-      //   previousTime = now;
-      // }
+      }  
     }
 
     
@@ -75,7 +70,6 @@ class Sprite {
         player.this_animation.currentFrame = 0;
         player.this_animation = goku_idle_right_animation;
         keys.w.pressed = false;        
-        console.log("ok");
       }
     }
     else {
@@ -222,10 +216,18 @@ window.addEventListener('keyup', (event) => {
   switch(event.key){
     case 'd' :
       keys.d.pressed = false;
+      if (keys.a.pressed){
+        player.this_animation = goku_walking_left_base_animation;
+        break;
+      }
       player.this_animation = goku_idle_right_animation;
     break;
     case 'a' : 
       keys.a.pressed = false;
+      if (keys.d.pressed){
+        player.this_animation = goku_walking_right_base_animation;
+        break;
+      }
       player.this_animation = goku_idle_left_animation;
     break;
     case 'w' : 
