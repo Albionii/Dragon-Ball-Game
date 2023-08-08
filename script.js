@@ -210,7 +210,11 @@ window.addEventListener('keydown', (event) => {
       break;
 
     case 'i':
-      player.this_animation = goku_teleport_base_animation;
+      if (ifMovingRight()){
+        player.this_animation = goku_teleport_base_right_animation;
+      }else {
+        player.this_animation = goku_teleport_base_left_animation
+      }
       break;
 
     case 'o': {
@@ -264,9 +268,6 @@ window.addEventListener('keyup', (event) => {
       }
       player.this_animation = goku_idle_left_animation;
     break;
-    case 'w' : 
-      // keys.w.pressed = false;
-    break;
 
     case 'j' : 
       keys.j.pressed = false;
@@ -284,7 +285,8 @@ window.addEventListener('keyup', (event) => {
 
 
 function moveInterrupted(){
-  goku_teleport_base_animation.currentFrame = 0;
+  goku_teleport_base_right_animation.currentFrame = 0;
+  goku_teleport_base_left_animation.currentFrame = 0;
   goku_transform_animation.currentFrame = 0;
   goku_disk_base_animation.currentFrame = 0;
 }
