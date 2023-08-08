@@ -68,7 +68,13 @@ class Sprite {
       this.velocity.y = 0;
       if (keys.w.pressed) {
         player.this_animation.currentFrame = 0;
-        player.this_animation = goku_idle_right_animation;
+        if (keys.a.pressed) {
+          player.this_animation = goku_walking_left_base_animation;
+        }else if (keys.d.pressed){
+          player.this_animation = goku_walking_right_base_animation
+        }else {
+          player.this_animation = goku_idle_right_animation;
+        }
         keys.w.pressed = false;        
       }
     }
@@ -115,6 +121,9 @@ const keys = {
   j : {
     pressed: false
   },
+  o : {
+    pressed: false
+  },
 
   // Enemy keys
 
@@ -158,19 +167,29 @@ window.addEventListener('keydown', (event) => {
     case 'd' :
       keys.d.pressed = true;
       player.lastKey = 'd';
-      player.this_animation = goku_walking_right_base_animation;
+      if (keys.w.pressed == false){
+        player.this_animation = goku_walking_right_base_animation;
+      }
+      moveInterrupted();
       break;
     case 'a' : 
       keys.a.pressed = true;
       player.lastKey = 'a';
-      player.this_animation = goku_walking_left_base_animation
-      
+      if (keys.w.pressed == false){
+        player.this_animation = goku_walking_left_base_animation;
+      }
+      moveInterrupted();
       break;
     case 'w' : 
       if (keys.w.pressed == false){
         keys.w.pressed = true;
         player.velocity.y = -10;
-        player.this_animation = goku_jump_base_animation;  
+        if (ifMovingLeft()){
+          player.this_animation = goku_jump_base_left_animation;  
+        }else {
+          player.this_animation = goku_jump_base_right_animation;  
+        }
+        
       }
       break;
 
@@ -183,12 +202,21 @@ window.addEventListener('keydown', (event) => {
     //Attack
     case 'j': 
       keys.j.pressed = true;
-      player.this_animation = goku_attack_base_animation;
+      if (ifMovingLeft()){
+        player.this_animation = goku_attack_base_left_animation;
+      }else {
+        player.this_animation = goku_attack_base_right_animation;
+      }
       break;
 
     case 'i':
       player.this_animation = goku_teleport_base_animation;
       break;
+
+    case 'o': {
+      player.this_animation = goku_disk_base_animation;
+      break;
+    }
 
 
 
@@ -217,7 +245,9 @@ window.addEventListener('keyup', (event) => {
     case 'd' :
       keys.d.pressed = false;
       if (keys.a.pressed){
-        player.this_animation = goku_walking_left_base_animation;
+        if (keys.w.pressed == false){
+          player.this_animation = goku_walking_left_base_animation;
+        }
         player.lastKey = 'a';
         break;
       }
@@ -226,7 +256,9 @@ window.addEventListener('keyup', (event) => {
     case 'a' : 
       keys.a.pressed = false;
       if (keys.d.pressed){
-        player.this_animation = goku_walking_right_base_animation;
+        if (keys.w.pressed == false){
+          player.this_animation = goku_walking_right_base_animation;
+        }
         player.lastKey = 'd';
         break;
       }
@@ -249,6 +281,30 @@ window.addEventListener('keyup', (event) => {
       break;
   }
 });
+
+
+function moveInterrupted(){
+  goku_teleport_base_animation.currentFrame = 0;
+  goku_transform_animation.currentFrame = 0;
+  goku_disk_base_animation.currentFrame = 0;
+}
+
+function ifMovingLeft(){
+  return  keys.a.pressed || 
+          player.this_animation == goku_idle_left_animation ||
+          player.this_animation == goku_attack_base_left_animation ||
+          player.this_animation == goku_walking_left_base_animation ||
+          player.this_animation == goku_jump_base_left_animation; 
+}
+function ifMovingRight(){
+  return  keys.d.pressed || 
+          player.this_animation == goku_idle_right_animation ||
+          player.this_animation == goku_attack_base_right_animation ||
+          player.this_animation == goku_walking_right_base_animation ||
+          player.this_animation == goku_jump_base_right_animation; 
+}
+
+
 
 preloadImages();
 animate();

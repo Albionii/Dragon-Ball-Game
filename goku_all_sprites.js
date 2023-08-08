@@ -39,20 +39,33 @@ const goku_walking_left_base_frames = [
   "Fotot/Walking_left_base/3.png"
 ]
 
-const goku_jump_base_frames = [
-  "Fotot/Jump_base/1.png",
-  "Fotot/Jump_base/2.png",
-  "Fotot/Jump_base/3.png",
-  "Fotot/Jump_base/4.png",
-  "Fotot/Jump_base/5.png"
+const goku_jump_base_right_frames = [
+  "Fotot/Jump_base_right/1.png",
+  "Fotot/Jump_base_right/2.png",
+  "Fotot/Jump_base_right/3.png",
+  "Fotot/Jump_base_right/4.png"
 ]
 
-const goku_attack_base_frames = [
-  "Fotot/Attack/1.png",
-  "Fotot/Attack/2.png",
-  "Fotot/Attack/3.png",
-  "Fotot/Attack/4.png"
+const goku_jump_base_left_frames = [
+  "Fotot/Jump_base_left/1.png",
+  "Fotot/Jump_base_left/2.png",
+  "Fotot/Jump_base_left/3.png",
+  "Fotot/Jump_base_left/4.png"
 ]
+
+const goku_attack_base_right_frames = [
+  "Fotot/Attack_right/1.png",
+  "Fotot/Attack_right/2.png",
+  "Fotot/Attack_right/3.png",
+  "Fotot/Attack_right/4.png"
+]
+const goku_attack_base_left_frames = [
+  "Fotot/Attack_left/1.png",
+  "Fotot/Attack_left/2.png",
+  "Fotot/Attack_left/3.png",
+  "Fotot/Attack_left/4.png"
+]
+
 
 const goku_teleport_base_frames = [
   "Fotot/Teleport/0.png",
@@ -137,23 +150,38 @@ const goku_walking_left_base_animation = {
   }
 }
 
-const goku_jump_base_animation = {
+const goku_jump_base_right_animation = {
   frames: [],
   currentFrame: 0,
-  changePos:  [[0, 0], [0, 0],[0, 0], [0, 0], [0, 0]],
-  animation_speed : 1.05,
+  changePos:  [[0, 0], [0, 0],[0, 0], [0, 0]],
+  animation_speed : 0.85,
   move : function(e) {
     if (e >= 400*player.this_animation.animation_speed) {
       player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
       return true;
-  }
+    }
   }
 }
 
-const goku_attack_base_animation = {
+const goku_jump_base_left_animation = {
   frames: [],
   currentFrame: 0,
-  changePos:  [[0, 0],[0, 0], [0, 0], [0, 0]],
+  changePos:  [[0, 0], [0, 0],[0, 0], [0, 0]],
+  animation_speed : 0.85,
+  move : function(e) {
+    if (e >= 400*player.this_animation.animation_speed) {
+      player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+      console.log(keys.w.pressed);
+      return true;
+    }
+  }
+}
+
+
+const goku_attack_base_right_animation = {
+  frames: [],
+  currentFrame: 0,
+  changePos:  [[0, 5],[0, 5], [0, 5], [0, 5]],
   animation_speed : 0.8,
   move : function(e) {
     if (e >= 400*player.this_animation.animation_speed) {
@@ -162,7 +190,23 @@ const goku_attack_base_animation = {
         player.this_animation = goku_idle_right_animation;
       }
       return true;
+    }
   }
+}
+
+const goku_attack_base_left_animation = {
+  frames: [],
+  currentFrame: 0,
+  changePos:  [[0, 5],[0, 5], [0, 5], [0, 5]],
+  animation_speed : 0.8,
+  move : function(e) {
+    if (e >= 400*player.this_animation.animation_speed) {
+      player.this_animation.currentFrame = (player.this_animation.currentFrame+1)%player.this_animation.frames.length;
+      if (keys.j.pressed == false) {
+        player.this_animation = goku_idle_left_animation;
+      }
+      return true;
+    }
   }
 }
 
@@ -187,13 +231,25 @@ const goku_teleport_base_animation = {
   }
   }
 }
-
 const goku_disk_base_animation = {
   frames: [],
   currentFrame: 0,
-  changePos:  [[0, 0], [0, 0],[0, 0], [0, 0],[0, 0]],
+  changePos:  [[-21, -10], [-27, -10],[0, 10], [0, 5],[0, 0], [0, 0]],
   animation_speed : 1,
   move : function(e) {
+    
+    if (e >= 400 * player.this_animation.animation_speed && (player.this_animation.currentFrame <= 3)){
+      // console.log(player.this_animation.currentFrame);
+      
+      if (player.this_animation.currentFrame == 3){
+        player.this_animation.currentFrame = 0;
+        player.this_animation = goku_idle_right_animation;
+        return true;
+      }
+      
+      player.this_animation.currentFrame++;
+      return true;
+    }
   }
 }
 
@@ -203,9 +259,12 @@ const all_sprites = [
   goku_transform_frames, 
   goku_walking_right_base_frames,
   goku_walking_left_base_frames, 
-  goku_jump_base_frames,
-  goku_attack_base_frames,
-  goku_teleport_base_frames
+  goku_jump_base_right_frames,
+  goku_jump_base_left_frames,
+  goku_attack_base_right_frames,
+  goku_attack_base_left_frames,
+  goku_teleport_base_frames,
+  goku_disk_base_frames
 ];
 const all_animations = [
   goku_idle_right_animation,
@@ -213,7 +272,10 @@ const all_animations = [
   goku_transform_animation, 
   goku_walking_right_base_animation,
   goku_walking_left_base_animation, 
-  goku_jump_base_animation,
-  goku_attack_base_animation,
-  goku_teleport_base_animation
+  goku_jump_base_right_animation,
+  goku_jump_base_left_animation,
+  goku_attack_base_right_animation,
+  goku_attack_base_left_animation,
+  goku_teleport_base_animation,
+  goku_disk_base_animation
 ];
