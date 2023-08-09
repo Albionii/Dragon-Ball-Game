@@ -217,7 +217,6 @@ window.addEventListener('keydown', (event) => {
       }else {
         player.this_animation = goku_teleport_base_left_animation
       }
-      moveInterrupted();
       break;
 
     case 'o': {
@@ -288,7 +287,7 @@ window.addEventListener('keyup', (event) => {
 
 
 function moveInterrupted(){
-  if (goku_teleport_base_right_animation.currentFrame >= 3){
+  if (goku_teleport_base_right_animation.currentFrame == 3){
     let temp = player.position.x + 600;
     if (temp < canvas.width){
       player.position.x += 600;
@@ -296,7 +295,7 @@ function moveInterrupted(){
       player.position.x = canvas.width-50;
     }
   }
-  if (goku_teleport_base_left_animation.currentFrame >= 3){
+  if (goku_teleport_base_left_animation.currentFrame == 3){
     let temp = player.position.x - 600;
     if (temp > 0){
       player.position.x -= 600;
@@ -326,8 +325,5 @@ function ifMovingRight(){
           player.this_animation == goku_jump_base_right_animation || 
           player.this_animation == goku_teleport_base_right_animation; 
 }
-
-
-
 preloadImages();
 animate();
