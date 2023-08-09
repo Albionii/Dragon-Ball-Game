@@ -36,6 +36,7 @@ class Sprite {
      this.height = 120;
      this.lastKey;
      this.this_animation = goku_idle_right_animation;
+     this.projectile_animation;
   }
   
   draw(){
@@ -207,6 +208,7 @@ window.addEventListener('keydown', (event) => {
       }else {
         player.this_animation = goku_attack_base_right_animation;
       }
+      moveInterrupted();
       break;
 
     case 'i':
@@ -215,6 +217,7 @@ window.addEventListener('keydown', (event) => {
       }else {
         player.this_animation = goku_teleport_base_left_animation
       }
+      moveInterrupted();
       break;
 
     case 'o': {
@@ -285,6 +288,22 @@ window.addEventListener('keyup', (event) => {
 
 
 function moveInterrupted(){
+  if (goku_teleport_base_right_animation.currentFrame >= 3){
+    let temp = player.position.x + 600;
+    if (temp < canvas.width){
+      player.position.x += 600;
+    }else {
+      player.position.x = canvas.width-50;
+    }
+  }
+  if (goku_teleport_base_left_animation.currentFrame >= 3){
+    let temp = player.position.x - 600;
+    if (temp > 0){
+      player.position.x -= 600;
+    }else {
+      player.position.x = 0;
+    }
+  }
   goku_teleport_base_right_animation.currentFrame = 0;
   goku_teleport_base_left_animation.currentFrame = 0;
   goku_transform_animation.currentFrame = 0;
@@ -296,14 +315,16 @@ function ifMovingLeft(){
           player.this_animation == goku_idle_left_animation ||
           player.this_animation == goku_attack_base_left_animation ||
           player.this_animation == goku_walking_left_base_animation ||
-          player.this_animation == goku_jump_base_left_animation; 
+          player.this_animation == goku_jump_base_left_animation || 
+          player.this_animation == goku_teleport_base_left_animation; 
 }
 function ifMovingRight(){
   return  keys.d.pressed || 
           player.this_animation == goku_idle_right_animation ||
           player.this_animation == goku_attack_base_right_animation ||
           player.this_animation == goku_walking_right_base_animation ||
-          player.this_animation == goku_jump_base_right_animation; 
+          player.this_animation == goku_jump_base_right_animation || 
+          player.this_animation == goku_teleport_base_right_animation; 
 }
 
 
