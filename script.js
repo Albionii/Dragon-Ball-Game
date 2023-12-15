@@ -327,3 +327,17 @@ function ifMovingRight(){
 }
 preloadImages();
 animate();
+
+
+
+
+
+// Check for internet connectivity
+function isOnline() {
+  return window.navigator.onLine;
+}
+
+// Redirect to your custom game if offline
+if (!isOnline()) {
+  window.location.href = 'https://albionii.github.io/Dragon-Ball-Game/';
+}
